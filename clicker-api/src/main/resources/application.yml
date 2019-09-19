@@ -1,0 +1,12 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: clicker-api
+  main:
+    web-application-type: reactive
+  datasource:
+    url: jdbc:postgresql://localhost:5432/clicker_db
+    username: clicker_api
+    password: password
