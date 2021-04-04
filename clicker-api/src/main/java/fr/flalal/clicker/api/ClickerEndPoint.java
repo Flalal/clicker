@@ -9,8 +9,8 @@ import reactor.core.publisher.Mono;
 @RequestMapping("/api/v0")
 public class ClickerEndPoint {
 
-    @RequestMapping("/test")
+    @RequestMapping
     public Mono<ResponseEntity<String>> getTest() {
-        return Mono.just(ResponseEntity.ok("Test"));
+        return Mono.just(ResponseEntity.ok("V0"));
     }
 }

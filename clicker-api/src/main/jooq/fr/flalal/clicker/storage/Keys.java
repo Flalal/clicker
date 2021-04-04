@@ -4,9 +4,18 @@
 package fr.flalal.clicker.storage;
 
 
+import fr.flalal.clicker.storage.tables.Game;
+import fr.flalal.clicker.storage.tables.GameGenerator;
+import fr.flalal.clicker.storage.tables.Generator;
+import fr.flalal.clicker.storage.tables.GeneratorCostPerLevel;
 import fr.flalal.clicker.storage.tables.Player;
+import fr.flalal.clicker.storage.tables.records.GameGeneratorRecord;
+import fr.flalal.clicker.storage.tables.records.GameRecord;
+import fr.flalal.clicker.storage.tables.records.GeneratorCostPerLevelRecord;
+import fr.flalal.clicker.storage.tables.records.GeneratorRecord;
 import fr.flalal.clicker.storage.tables.records.PlayerRecord;
 
+import org.jooq.ForeignKey;
 import org.jooq.TableField;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
@@ -24,5 +33,18 @@ public class Keys {
     // UNIQUE and PRIMARY KEY definitions
     // -------------------------------------------------------------------------
 
+    public static final UniqueKey<GameRecord> GAME_PKEY = Internal.createUniqueKey(Game.GAME, DSL.name("game_pkey"), new TableField[] { Game.GAME.ID }, true);
+    public static final UniqueKey<GameGeneratorRecord> GAME_GENERATOR_PKEY = Internal.createUniqueKey(GameGenerator.GAME_GENERATOR, DSL.name("game_generator_pkey"), new TableField[] { GameGenerator.GAME_GENERATOR.ID_GAME, GameGenerator.GAME_GENERATOR.ID_GENERATOR }, true);
+    public static final UniqueKey<GeneratorRecord> GENERATOR_PKEY = Internal.createUniqueKey(Generator.GENERATOR, DSL.name("generator_pkey"), new TableField[] { Generator.GENERATOR.ID }, true);
+    public static final UniqueKey<GeneratorCostPerLevelRecord> GENERATOR_COST_PER_LEVEL_PKEY = Internal.createUniqueKey(GeneratorCostPerLevel.GENERATOR_COST_PER_LEVEL, DSL.name("generator_cost_per_level_pkey"), new TableField[] { GeneratorCostPerLevel.GENERATOR_COST_PER_LEVEL.ID_GENERATOR, GeneratorCostPerLevel.GENERATOR_COST_PER_LEVEL.LEVEL }, true);
     public static final UniqueKey<PlayerRecord> PLAYER_PKEY = Internal.createUniqueKey(Player.PLAYER, DSL.name("player_pkey"), new TableField[] { Player.PLAYER.ID }, true);
+
+    // -------------------------------------------------------------------------
+    // FOREIGN KEY definitions
+    // -------------------------------------------------------------------------
+
+    public static final ForeignKey<GameRecord, PlayerRecord> GAME__GAME_PLAYER_ID_FKEY = Internal.createForeignKey(Game.GAME, DSL.name("game_player_id_fkey"), new TableField[] { Game.GAME.PLAYER_ID }, Keys.PLAYER_PKEY, new TableField[] { Player.PLAYER.ID }, true);
+    public static final ForeignKey<GameGeneratorRecord, GameRecord> GAME_GENERATOR__GAME_GENERATOR_ID_GAME_FKEY = Internal.createForeignKey(GameGenerator.GAME_GENERATOR, DSL.name("game_generator_id_game_fkey"), new TableField[] { GameGenerator.GAME_GENERATOR.ID_GAME }, Keys.GAME_PKEY, new TableField[] { Game.GAME.ID }, true);
+    public static final ForeignKey<GameGeneratorRecord, GeneratorRecord> GAME_GENERATOR__GAME_GENERATOR_ID_GENERATOR_FKEY = Internal.createForeignKey(GameGenerator.GAME_GENERATOR, DSL.name("game_generator_id_generator_fkey"), new TableField[] { GameGenerator.GAME_GENERATOR.ID_GENERATOR }, Keys.GENERATOR_PKEY, new TableField[] { Generator.GENERATOR.ID }, true);
+    public static final ForeignKey<GeneratorCostPerLevelRecord, GeneratorRecord> GENERATOR_COST_PER_LEVEL__GENERATOR_COST_PER_LEVEL_ID_GENERATOR_FKEY = Internal.createForeignKey(GeneratorCostPerLevel.GENERATOR_COST_PER_LEVEL, DSL.name("generator_cost_per_level_id_generator_fkey"), new TableField[] { GeneratorCostPerLevel.GENERATOR_COST_PER_LEVEL.ID_GENERATOR }, Keys.GENERATOR_PKEY, new TableField[] { Generator.GENERATOR.ID }, true);
 }
