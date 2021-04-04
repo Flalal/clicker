@@ -7,7 +7,6 @@ package fr.flalal.clicker.storage;
 import fr.flalal.clicker.storage.tables.Game;
 import fr.flalal.clicker.storage.tables.GameGenerator;
 import fr.flalal.clicker.storage.tables.Generator;
-import fr.flalal.clicker.storage.tables.GeneratorCostPerLevel;
 import fr.flalal.clicker.storage.tables.Player;
 
 
@@ -31,11 +30,6 @@ public class Tables {
      * The table <code>clicker.generator</code>.
      */
     public static final Generator GENERATOR = Generator.GENERATOR;
-
-    /**
-     * The table <code>clicker.generator_cost_per_level</code>.
-     */
-    public static final GeneratorCostPerLevel GENERATOR_COST_PER_LEVEL = GeneratorCostPerLevel.GENERATOR_COST_PER_LEVEL;
 
     /**
      * The table <code>clicker.player</code>.

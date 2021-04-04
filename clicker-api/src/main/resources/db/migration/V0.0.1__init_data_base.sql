@@ -23,27 +23,21 @@ CREATE TABLE game
 
 CREATE TABLE generator
 (
-    id          UUID PRIMARY KEY,
-    name        TEXT,
-    description TEXT,
-    enabled     BOOLEAN DEFAULT FALSE
+    id                    UUID PRIMARY KEY,
+    name                  TEXT,
+    description           TEXT,
+    base_cost             NUMERIC NOT NULL,
+    base_multiplier       NUMERIC NOT NULL,
+    base_click_per_second NUMERIC NOT NULL,
+    enabled               BOOLEAN DEFAULT FALSE
 );
 
 CREATE TABLE game_generator
 (
     id_game      UUID REFERENCES game,
     id_generator UUID REFERENCES generator,
-    actual_level INTEGER   NOT NULL,
+    level        INTEGER   NOT NULL,
     created_at   TIMESTAMP NOT NULL,
     updated_at   TIMESTAMP NOT NULL,
     PRIMARY KEY (id_game, id_generator)
-);
-
-CREATE TABLE generator_cost_per_level
-(
-    id_generator     UUID REFERENCES generator,
-    level            INTEGER NOT NULL,
-    cost             NUMERIC NOT NULL,
-    click_per_second NUMERIC NOT NULL,
-    PRIMARY KEY (id_generator, level)
 );

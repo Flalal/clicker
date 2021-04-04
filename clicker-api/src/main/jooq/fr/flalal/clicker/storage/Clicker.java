@@ -7,7 +7,6 @@ package fr.flalal.clicker.storage;
 import fr.flalal.clicker.storage.tables.Game;
 import fr.flalal.clicker.storage.tables.GameGenerator;
 import fr.flalal.clicker.storage.tables.Generator;
-import fr.flalal.clicker.storage.tables.GeneratorCostPerLevel;
 import fr.flalal.clicker.storage.tables.Player;
 
 import java.util.Arrays;
@@ -47,11 +46,6 @@ public class Clicker extends SchemaImpl {
     public final Generator GENERATOR = Generator.GENERATOR;
 
     /**
-     * The table <code>clicker.generator_cost_per_level</code>.
-     */
-    public final GeneratorCostPerLevel GENERATOR_COST_PER_LEVEL = GeneratorCostPerLevel.GENERATOR_COST_PER_LEVEL;
-
-    /**
      * The table <code>clicker.player</code>.
      */
     public final Player PLAYER = Player.PLAYER;
@@ -75,7 +69,6 @@ public class Clicker extends SchemaImpl {
             Game.GAME,
             GameGenerator.GAME_GENERATOR,
             Generator.GENERATOR,
-            GeneratorCostPerLevel.GENERATOR_COST_PER_LEVEL,
             Player.PLAYER);
     }
 }

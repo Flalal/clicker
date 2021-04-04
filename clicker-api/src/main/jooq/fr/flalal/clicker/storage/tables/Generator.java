@@ -8,6 +8,7 @@ import fr.flalal.clicker.storage.Clicker;
 import fr.flalal.clicker.storage.Keys;
 import fr.flalal.clicker.storage.tables.records.GeneratorRecord;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -16,7 +17,7 @@ import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row4;
+import org.jooq.Row7;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -62,6 +63,21 @@ public class Generator extends TableImpl<GeneratorRecord> {
      * The column <code>clicker.generator.description</code>.
      */
     public final TableField<GeneratorRecord, String> DESCRIPTION = createField(DSL.name("description"), SQLDataType.CLOB, this, "");
+
+    /**
+     * The column <code>clicker.generator.base_cost</code>.
+     */
+    public final TableField<GeneratorRecord, BigDecimal> BASE_COST = createField(DSL.name("base_cost"), SQLDataType.NUMERIC.nullable(false), this, "");
+
+    /**
+     * The column <code>clicker.generator.base_multiplier</code>.
+     */
+    public final TableField<GeneratorRecord, BigDecimal> BASE_MULTIPLIER = createField(DSL.name("base_multiplier"), SQLDataType.NUMERIC.nullable(false), this, "");
+
+    /**
+     * The column <code>clicker.generator.base_click_per_second</code>.
+     */
+    public final TableField<GeneratorRecord, BigDecimal> BASE_CLICK_PER_SECOND = createField(DSL.name("base_click_per_second"), SQLDataType.NUMERIC.nullable(false), this, "");
 
     /**
      * The column <code>clicker.generator.enabled</code>.
@@ -143,11 +159,11 @@ public class Generator extends TableImpl<GeneratorRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row4 type methods
+    // Row7 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row4<UUID, String, String, Boolean> fieldsRow() {
-        return (Row4) super.fieldsRow();
+    public Row7<UUID, String, String, BigDecimal, BigDecimal, BigDecimal, Boolean> fieldsRow() {
+        return (Row7) super.fieldsRow();
     }
 }

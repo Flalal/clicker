@@ -1,5 +1,6 @@
 package fr.flalal.clicker.api.player;
 
+import fr.flalal.clicker.api.representation.PlayerRepresentation;
 import fr.flalal.clicker.storage.tables.records.PlayerRecord;
 import org.springframework.stereotype.Component;
 
@@ -16,14 +17,14 @@ public class PlayerConverter {
     }
 
     public PlayerRepresentation toRepresentation(PlayerRecord record) {
-        return PlayerRepresentation.builder()
-                .id(record.getId())
-                .firstName(record.getFirstName())
-                .lastname(record.getLastName())
-                .email(record.getEmail())
-                .pseudonym(record.getPseudonym())
-                .role(record.getRole())
-                .build();
+        PlayerRepresentation representation = new PlayerRepresentation();
+        representation.setId(record.getId());
+        representation.setEmail(record.getEmail());
+        representation.setFirstName(record.getFirstName());
+        representation.setLastname(record.getLastName());
+        representation.setPseudonym(record.getPseudonym());
+        representation.setRole(record.getRole());
+        return representation;
     }
 
 }

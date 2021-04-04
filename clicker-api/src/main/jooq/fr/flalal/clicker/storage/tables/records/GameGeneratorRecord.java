@@ -53,16 +53,16 @@ public class GameGeneratorRecord extends UpdatableRecordImpl<GameGeneratorRecord
     }
 
     /**
-     * Setter for <code>clicker.game_generator.actual_level</code>.
+     * Setter for <code>clicker.game_generator.level</code>.
      */
-    public void setActualLevel(Integer value) {
+    public void setLevel(Integer value) {
         set(2, value);
     }
 
     /**
-     * Getter for <code>clicker.game_generator.actual_level</code>.
+     * Getter for <code>clicker.game_generator.level</code>.
      */
-    public Integer getActualLevel() {
+    public Integer getLevel() {
         return (Integer) get(2);
     }
 
@@ -129,7 +129,7 @@ public class GameGeneratorRecord extends UpdatableRecordImpl<GameGeneratorRecord
 
     @Override
     public Field<Integer> field3() {
-        return GameGenerator.GAME_GENERATOR.ACTUAL_LEVEL;
+        return GameGenerator.GAME_GENERATOR.LEVEL;
     }
 
     @Override
@@ -154,7 +154,7 @@ public class GameGeneratorRecord extends UpdatableRecordImpl<GameGeneratorRecord
 
     @Override
     public Integer component3() {
-        return getActualLevel();
+        return getLevel();
     }
 
     @Override
@@ -179,7 +179,7 @@ public class GameGeneratorRecord extends UpdatableRecordImpl<GameGeneratorRecord
 
     @Override
     public Integer value3() {
-        return getActualLevel();
+        return getLevel();
     }
 
     @Override
@@ -206,7 +206,7 @@ public class GameGeneratorRecord extends UpdatableRecordImpl<GameGeneratorRecord
 
     @Override
     public GameGeneratorRecord value3(Integer value) {
-        setActualLevel(value);
+        setLevel(value);
         return this;
     }
 
@@ -246,12 +246,12 @@ public class GameGeneratorRecord extends UpdatableRecordImpl<GameGeneratorRecord
     /**
      * Create a detached, initialised GameGeneratorRecord
      */
-    public GameGeneratorRecord(UUID idGame, UUID idGenerator, Integer actualLevel, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public GameGeneratorRecord(UUID idGame, UUID idGenerator, Integer level, LocalDateTime createdAt, LocalDateTime updatedAt) {
         super(GameGenerator.GAME_GENERATOR);
 
         setIdGame(idGame);
         setIdGenerator(idGenerator);
-        setActualLevel(actualLevel);
+        setLevel(level);
         setCreatedAt(createdAt);
         setUpdatedAt(updatedAt);
     }

@@ -1,5 +1,6 @@
 package fr.flalal.clicker.api.player;
 
+import fr.flalal.clicker.api.representation.PlayerRepresentation;
 import fr.flalal.clicker.storage.tables.records.PlayerRecord;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -8,7 +9,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor

@@ -60,9 +60,9 @@ public class GameGenerator extends TableImpl<GameGeneratorRecord> {
     public final TableField<GameGeneratorRecord, UUID> ID_GENERATOR = createField(DSL.name("id_generator"), SQLDataType.UUID.nullable(false), this, "");
 
     /**
-     * The column <code>clicker.game_generator.actual_level</code>.
+     * The column <code>clicker.game_generator.level</code>.
      */
-    public final TableField<GameGeneratorRecord, Integer> ACTUAL_LEVEL = createField(DSL.name("actual_level"), SQLDataType.INTEGER.nullable(false), this, "");
+    public final TableField<GameGeneratorRecord, Integer> LEVEL = createField(DSL.name("level"), SQLDataType.INTEGER.nullable(false), this, "");
 
     /**
      * The column <code>clicker.game_generator.created_at</code>.
