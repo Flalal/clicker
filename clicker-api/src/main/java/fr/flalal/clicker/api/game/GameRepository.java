@@ -26,25 +26,33 @@ public class GameRepository {
         jooq.select(GAME.asterisk(), PLAYER.asterisk(), GENERATOR.asterisk(), GAME_GENERATOR.asterisk())
                 .from(GAME)
                 .join(PLAYER).on(GAME.PLAYER_ID.eq(PLAYER.ID))
-                .join(GAME_GENERATOR).on(GAME_GENERATOR.ID_GAME.eq(GAME.ID))
-                .join(GENERATOR).on(GENERATOR.ID.eq(GAME_GENERATOR.ID_GENERATOR))
+                .leftJoin(GAME_GENERATOR).on(GAME_GENERATOR.ID_GAME.eq(GAME.ID))
+                .leftJoin(GENERATOR).on(GENERATOR.ID.eq(GAME_GENERATOR.ID_GENERATOR))
                 .where(GAME.ID.eq(gameId))
                 .fetch()
                 .forEach(record -> {
                     model.setGameRecord(record.into(GameRecord.class));
                     model.setPlayerRecord(record.into(PlayerRecord.class));
-                    GeneratorModel generatorModel = toGeneratorModel(record.into(GeneratorRecord.class), record.into(GameGeneratorRecord.class));
-                    model.getGeneratorModels().add(generatorModel);
+                    GeneratorRecord generatorRecord = record.into(GeneratorRecord.class);
+                    GameGeneratorRecord gameGeneratorRecord = record.into(GameGeneratorRecord.class);
+                    GeneratorModel generatorModel = toGeneratorModel(generatorRecord, gameGeneratorRecord);
+                    if (generatorModel != null) {
+                        model.getGeneratorModels().add(generatorModel);
+                    }
                 });
         return model;
     }
 
     private GeneratorModel toGeneratorModel(GeneratorRecord generator, GameGeneratorRecord gameGenerator) {
+        if (generator == null) {
+            return null;
+        }
         GeneratorModel model = new GeneratorModel();
         model.setId(generator.getId());
         model.setLevel(gameGenerator.getLevel());
         model.setName(generator.getName());
         model.setDescription(generator.getDescription());
+        model.setGeneratedClick(gameGenerator.getGeneratedClick());
 
         model.setBaseCost(generator.getBaseCost());
         model.setBaseMultiplier(generator.getBaseMultiplier());

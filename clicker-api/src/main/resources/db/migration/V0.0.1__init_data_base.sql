@@ -34,10 +34,11 @@ CREATE TABLE generator
 
 CREATE TABLE game_generator
 (
-    id_game      UUID REFERENCES game,
-    id_generator UUID REFERENCES generator,
-    level        INTEGER   NOT NULL,
-    created_at   TIMESTAMP NOT NULL,
-    updated_at   TIMESTAMP NOT NULL,
+    id_game         UUID REFERENCES game,
+    id_generator    UUID REFERENCES generator,
+    level           INTEGER   NOT NULL,
+    generated_click NUMERIC   NOT NULL DEFAULT 0,
+    created_at      TIMESTAMP NOT NULL,
+    updated_at      TIMESTAMP NOT NULL,
     PRIMARY KEY (id_game, id_generator)
 );

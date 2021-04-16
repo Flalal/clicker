@@ -12,6 +12,7 @@ public class GeneratorModel {
     private int level;
     private String name;
     private String description;
+    private BigDecimal generatedClick;
     private BigDecimal baseCost;
     private BigDecimal baseMultiplier;
     private BigDecimal baseClickPerSecond;

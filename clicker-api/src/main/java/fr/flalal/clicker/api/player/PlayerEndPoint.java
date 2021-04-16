@@ -1,5 +1,6 @@
 package fr.flalal.clicker.api.player;
 
+import fr.flalal.clicker.api.error.ResourceNotFoundException;
 import fr.flalal.clicker.api.representation.PlayerRepresentation;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,15 +14,14 @@ import reactor.core.publisher.Mono;
 @AllArgsConstructor
 public class PlayerEndPoint {
 
-    private PlayerService service;
+    private final PlayerService service;
 
     @GetMapping
-    public Flux<PlayerRepresentation> getAllPlayers() throws Exception {
+    public Flux<PlayerRepresentation> getAllPlayers() {
         try {
             return service.getAllPlayers();
-        } catch (Exception e) {
-            // TODO : log some good error
-            log.error("Error");
+        } catch (ResourceNotFoundException e) {
+            log.error(e.getMessage());
             throw e;
         }
     }

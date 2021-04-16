@@ -1,12 +1,9 @@
 package fr.flalal.clicker.api.game;
 
-import fr.flalal.clicker.api.player.PlayerDraft;
-import fr.flalal.clicker.api.representation.PlayerRepresentation;
 import fr.flalal.clicker.api.representation.GameRepresentation;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.UUID;
@@ -17,11 +14,19 @@ import java.util.UUID;
 @AllArgsConstructor
 public class GameEndPoint {
 
-    private GameService service;
+    private final GameService service;
 
     @GetMapping("/{id}")
     public Mono<GameRepresentation> findGameById(@PathVariable UUID id) {
         return service.findGameById(id);
+    }
+
+    @PutMapping("/{id}")
+    public Mono<GameRepresentation> updateGame(@PathVariable UUID id, @RequestBody GameRepresentation game) {
+        if (!game.getId().equals(id)) {
+            // TODO : precondition failed
+        }
+        return service.updateGame(game);
     }
 
 }

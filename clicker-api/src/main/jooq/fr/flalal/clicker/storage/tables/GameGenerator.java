@@ -8,6 +8,7 @@ import fr.flalal.clicker.storage.Clicker;
 import fr.flalal.clicker.storage.Keys;
 import fr.flalal.clicker.storage.tables.records.GameGeneratorRecord;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
@@ -17,7 +18,7 @@ import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row5;
+import org.jooq.Row6;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -63,6 +64,11 @@ public class GameGenerator extends TableImpl<GameGeneratorRecord> {
      * The column <code>clicker.game_generator.level</code>.
      */
     public final TableField<GameGeneratorRecord, Integer> LEVEL = createField(DSL.name("level"), SQLDataType.INTEGER.nullable(false), this, "");
+
+    /**
+     * The column <code>clicker.game_generator.generated_click</code>.
+     */
+    public final TableField<GameGeneratorRecord, BigDecimal> GENERATED_CLICK = createField(DSL.name("generated_click"), SQLDataType.NUMERIC.nullable(false).defaultValue(DSL.field("0", SQLDataType.NUMERIC)), this, "");
 
     /**
      * The column <code>clicker.game_generator.created_at</code>.
@@ -171,11 +177,11 @@ public class GameGenerator extends TableImpl<GameGeneratorRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row5 type methods
+    // Row6 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row5<UUID, UUID, Integer, LocalDateTime, LocalDateTime> fieldsRow() {
-        return (Row5) super.fieldsRow();
+    public Row6<UUID, UUID, Integer, BigDecimal, LocalDateTime, LocalDateTime> fieldsRow() {
+        return (Row6) super.fieldsRow();
     }
 }

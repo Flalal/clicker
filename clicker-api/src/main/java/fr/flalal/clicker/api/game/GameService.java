@@ -18,8 +18,8 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class GameService {
 
-    private GameRepository repository;
-    private PlayerConverter playerConverter;
+    private final GameRepository repository;
+    private final PlayerConverter playerConverter;
 
     public Mono<GameRepresentation> findGameById(UUID id) {
         GameModel gameModel = repository.findGameById(id);
@@ -53,11 +53,31 @@ public class GameService {
         representation.setLevel(model.getLevel());
         representation.setName(model.getName());
         representation.setDescription(model.getDescription());
+        representation.setGeneratedClick(model.getGeneratedClick());
         representation.setBaseMultiplier(model.getBaseMultiplier());
         representation.setBaseClickPerSecond(model.getBaseClickPerSecond());
         representation.setBaseCost(model.getBaseCost());
         representation.setCreatedAt(model.getCreatedAt());
         representation.setUpdatedAt(model.getUpdatedAt());
         return representation;
+    }
+
+    public Mono<GameRepresentation> updateGame(GameRepresentation draft) {
+        return findGameById(draft.getId())
+                .map(gameStored -> compareGame(gameStored, draft));
+    }
+
+    private GameRepresentation compareGame(GameRepresentation stored, GameRepresentation draft) {
+        long secondDiff = (OffsetDateTime.now().toEpochSecond() - stored.getUpdatedAt().toEpochSecond()) / 1000;
+
+//        var computedClickByGenerator = draft.getGenerators().stream()
+//                .map(generator -> {
+                    // TODO : compare generator click
+//                    BigDecimal actualPossibleMultiplier = generator.getBaseMultiplier().multiply(BigDecimal.valueOf(generator.getLevel()));
+//                    BigDecimal numberOfPossibleGeneratedClick = actualMultiplier.multiply(generator.getBaseClickPerSecond()).multiply(BigDecimal.valueOf(secondDiff));
+
+//                });
+
+        return draft;
     }
 }

@@ -1,5 +1,7 @@
 package fr.flalal.clicker.api.player;
 
+import fr.flalal.clicker.api.error.NoContentException;
+import fr.flalal.clicker.api.error.ResourceNotFoundException;
 import fr.flalal.clicker.api.representation.PlayerRepresentation;
 import fr.flalal.clicker.storage.tables.records.PlayerRecord;
 import lombok.AllArgsConstructor;
@@ -14,14 +16,13 @@ import java.util.List;
 @AllArgsConstructor
 public class PlayerService {
 
-    private PlayerRepository repository;
-    private PlayerConverter converter;
+    private final PlayerRepository repository;
+    private final PlayerConverter converter;
 
-    public Flux<PlayerRepresentation> getAllPlayers() throws Exception {
+    public Flux<PlayerRepresentation> getAllPlayers() {
         List<PlayerRecord> playersRecord = repository.findAllPlayers();
-        // TODO : Create some Exception customer
         if (playersRecord.isEmpty()) {
-            throw new Exception();
+            throw new NoContentException("No players in database");
         }
         return Flux.fromIterable(converter.toRepresentation(playersRecord));
     }
