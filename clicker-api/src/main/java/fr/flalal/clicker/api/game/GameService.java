@@ -1,5 +1,6 @@
 package fr.flalal.clicker.api.game;
 
+import fr.flalal.clicker.api.error.ResourceNotFoundException;
 import fr.flalal.clicker.api.player.PlayerConverter;
 import fr.flalal.clicker.api.representation.GameRepresentation;
 import fr.flalal.clicker.api.representation.GeneratorRepresentation;
@@ -28,6 +29,9 @@ public class GameService {
 
     private GameRepresentation toRepresentation(GameModel model) {
         GameRepresentation representation = new GameRepresentation();
+        if (model.getGameRecord() == null) {
+            throw new ResourceNotFoundException("No game here");
+        }
 
         representation.setId(model.getGameRecord().getId());
         representation.setMoney(model.getGameRecord().getMoney());

@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository;
 
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import java.util.List;
 import java.util.UUID;
 
 import static fr.flalal.clicker.storage.Tables.*;
@@ -30,17 +29,19 @@ public class GameRepository {
                 .leftJoin(GENERATOR).on(GENERATOR.ID.eq(GAME_GENERATOR.ID_GENERATOR))
                 .where(GAME.ID.eq(gameId))
                 .fetch()
-                .forEach(record -> {
-                    model.setGameRecord(record.into(GameRecord.class));
-                    model.setPlayerRecord(record.into(PlayerRecord.class));
-                    GeneratorRecord generatorRecord = record.into(GeneratorRecord.class);
-                    GameGeneratorRecord gameGeneratorRecord = record.into(GameGeneratorRecord.class);
-                    GeneratorModel generatorModel = toGeneratorModel(generatorRecord, gameGeneratorRecord);
-                    if (generatorModel != null) {
-                        model.getGeneratorModels().add(generatorModel);
-                    }
-                });
+                .forEach(record -> populateGameModel(model, record));
         return model;
+    }
+
+    private void populateGameModel(GameModel model, org.jooq.Record record) {
+        model.setGameRecord(record.into(GameRecord.class));
+        model.setPlayerRecord(record.into(PlayerRecord.class));
+        GeneratorRecord generatorRecord = record.into(GeneratorRecord.class);
+        GameGeneratorRecord gameGeneratorRecord = record.into(GameGeneratorRecord.class);
+        GeneratorModel generatorModel = toGeneratorModel(generatorRecord, gameGeneratorRecord);
+        if (generatorModel != null) {
+            model.getGeneratorModels().add(generatorModel);
+        }
     }
 
     private GeneratorModel toGeneratorModel(GeneratorRecord generator, GameGeneratorRecord gameGenerator) {

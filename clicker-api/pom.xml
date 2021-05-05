@@ -19,6 +19,7 @@
 
 	<properties>
 		<java.version>11</java.version>
+		<postgres.schema>clicker</postgres.schema>
 	</properties>
 
 	<dependencies>
