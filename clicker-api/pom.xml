@@ -20,6 +20,7 @@
 	<properties>
 		<java.version>11</java.version>
 		<postgres.schema>clicker</postgres.schema>
+		<mapstruct.versions>1.4.2.Final</mapstruct.versions>
 	</properties>
 
 	<dependencies>
@@ -57,12 +58,12 @@
 		<dependency>
 			<groupId>org.mapstruct</groupId>
 			<artifactId>mapstruct</artifactId>
-			<version>1.4.2.Final</version>
+			<version>${mapstruct.versions}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.mapstruct</groupId>
 			<artifactId>mapstruct-processor</artifactId>
-			<version>1.4.2.Final</version>
+			<version>${mapstruct.versions}</version>
 		</dependency>
 	</dependencies>
 
