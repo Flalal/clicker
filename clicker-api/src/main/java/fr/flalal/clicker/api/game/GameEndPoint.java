@@ -1,5 +1,6 @@
 package fr.flalal.clicker.api.game;
 
+import fr.flalal.clicker.api.error.PreconditionFailedException;
 import fr.flalal.clicker.api.representation.GameRepresentation;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +25,7 @@ public class GameEndPoint {
     @PutMapping("/{id}")
     public Mono<GameRepresentation> updateGame(@PathVariable UUID id, @RequestBody GameRepresentation game) {
         if (!game.getId().equals(id)) {
-            // TODO : precondition failed
+            throw new PreconditionFailedException("Try to update an id game different of id game in body");
         }
         return service.updateGame(game);
     }

@@ -1,15 +1,15 @@
 package fr.flalal.clicker.api.game;
 
+import fr.flalal.clicker.api.Converter;
 import fr.flalal.clicker.storage.tables.records.GameGeneratorRecord;
 import fr.flalal.clicker.storage.tables.records.GameRecord;
 import fr.flalal.clicker.storage.tables.records.GeneratorRecord;
 import fr.flalal.clicker.storage.tables.records.PlayerRecord;
 import lombok.AllArgsConstructor;
 import org.jooq.DSLContext;
+import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Repository;
 
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
 import java.util.UUID;
 
 import static fr.flalal.clicker.storage.Tables.*;
@@ -19,6 +19,7 @@ import static fr.flalal.clicker.storage.Tables.*;
 public class GameRepository {
 
     private final DSLContext jooq;
+    private final Converter converter = Mappers.getMapper(Converter.class);
 
     public GameModel findGameById(UUID gameId) {
         GameModel model = new GameModel();
@@ -38,30 +39,10 @@ public class GameRepository {
         model.setPlayerRecord(record.into(PlayerRecord.class));
         GeneratorRecord generatorRecord = record.into(GeneratorRecord.class);
         GameGeneratorRecord gameGeneratorRecord = record.into(GameGeneratorRecord.class);
-        GeneratorModel generatorModel = toGeneratorModel(generatorRecord, gameGeneratorRecord);
+        GeneratorModel generatorModel = converter.toGeneratorModel(generatorRecord, gameGeneratorRecord);
         if (generatorModel != null) {
             model.getGeneratorModels().add(generatorModel);
         }
-    }
-
-    private GeneratorModel toGeneratorModel(GeneratorRecord generator, GameGeneratorRecord gameGenerator) {
-        if (generator == null) {
-            return null;
-        }
-        GeneratorModel model = new GeneratorModel();
-        model.setId(generator.getId());
-        model.setLevel(gameGenerator.getLevel());
-        model.setName(generator.getName());
-        model.setDescription(generator.getDescription());
-        model.setGeneratedClick(gameGenerator.getGeneratedClick());
-
-        model.setBaseCost(generator.getBaseCost());
-        model.setBaseMultiplier(generator.getBaseMultiplier());
-        model.setBaseClickPerSecond(generator.getBaseClickPerSecond());
-
-        model.setCreatedAt(OffsetDateTime.of(gameGenerator.getCreatedAt(), ZoneOffset.UTC));
-        model.setUpdatedAt(OffsetDateTime.of(gameGenerator.getUpdatedAt(), ZoneOffset.UTC));
-        return model;
     }
 
 }
