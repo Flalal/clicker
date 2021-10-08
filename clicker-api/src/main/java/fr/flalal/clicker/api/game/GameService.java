@@ -1,20 +1,14 @@
 package fr.flalal.clicker.api.game;
 
 import fr.flalal.clicker.api.Converter;
-import fr.flalal.clicker.api.error.ResourceNotFoundException;
 import fr.flalal.clicker.api.representation.GameRepresentation;
-import fr.flalal.clicker.api.representation.GeneratorRepresentation;
-import fr.flalal.clicker.api.representation.ManualClickRepresentation;
 import lombok.AllArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
 import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
-import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor

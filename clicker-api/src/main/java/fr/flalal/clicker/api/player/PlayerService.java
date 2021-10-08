@@ -2,6 +2,7 @@ package fr.flalal.clicker.api.player;
 
 import fr.flalal.clicker.api.Converter;
 import fr.flalal.clicker.api.error.NoContentException;
+import fr.flalal.clicker.api.error.ResourceNotFoundException;
 import fr.flalal.clicker.api.representation.PlayerRepresentation;
 import fr.flalal.clicker.storage.tables.records.PlayerRecord;
 import lombok.AllArgsConstructor;
@@ -30,5 +31,13 @@ public class PlayerService {
 
     public Mono<PlayerRepresentation> createPlayer(@RequestBody PlayerDraft draft) throws Exception {
         return Mono.just(converter.toPlayerRepresentation(repository.createPlayer(draft)));
+    }
+
+    public Mono<PlayerRepresentation> getPlayerByPseudonym(String pseudonym) {
+        PlayerRecord player = repository.findPlayerByPseudonym(pseudonym);
+        if (player == null) {
+            throw new ResourceNotFoundException("Player not found");
+        }
+        return Mono.just(converter.toPlayerRepresentation(player));
     }
 }

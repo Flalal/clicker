@@ -26,6 +26,16 @@ public class PlayerEndPoint {
         }
     }
 
+    @GetMapping("/{pseudonym}")
+    public Mono<PlayerRepresentation> getPlayerByPseudonym(@PathVariable String pseudonym) {
+        try {
+            return service.getPlayerByPseudonym(pseudonym);
+        } catch (ResourceNotFoundException e) {
+            log.error(e.getMessage());
+            throw e;
+        }
+    }
+
     @PostMapping
     public Mono<PlayerRepresentation> createPlayer(@RequestBody PlayerDraft draft) throws Exception {
         // TODO : validator on draft

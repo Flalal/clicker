@@ -35,4 +35,10 @@ public class PlayerRepository {
         }
         return record;
     }
+
+    public PlayerRecord findPlayerByPseudonym(String pseudonym) {
+        return jooq.selectFrom(PLAYER)
+                .where(PLAYER.PSEUDONYM.equalIgnoreCase(pseudonym))
+                .fetchOneInto(PlayerRecord.class);
+    }
 }
