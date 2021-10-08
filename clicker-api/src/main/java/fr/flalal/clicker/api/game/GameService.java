@@ -23,6 +23,10 @@ public class GameService {
         return Mono.just(converter.toGameRepresentation(repository.findGameById(id)));
     }
 
+    public Mono<GameRepresentation> findGameByPseudonym(String pseudo) {
+        return Mono.just(converter.toGameRepresentation(repository.findGameByPseudonym(pseudo)));
+    }
+
     public Mono<GameRepresentation> updateGame(GameRepresentation draft) {
         return findGameById(draft.getId())
                 .map(gameStored -> compareGame(gameStored, draft));

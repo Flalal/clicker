@@ -4,6 +4,7 @@ import fr.flalal.clicker.api.Converter;
 import fr.flalal.clicker.api.error.NoContentException;
 import fr.flalal.clicker.api.error.ResourceNotFoundException;
 import fr.flalal.clicker.api.game.GameService;
+import fr.flalal.clicker.api.representation.GameRepresentation;
 import fr.flalal.clicker.api.representation.PlayerRepresentation;
 import fr.flalal.clicker.storage.tables.records.PlayerRecord;
 import lombok.AllArgsConstructor;
@@ -45,5 +46,9 @@ public class PlayerService {
             throw new ResourceNotFoundException("Player not found");
         }
         return Mono.just(converter.toPlayerRepresentation(player));
+    }
+
+    public Mono<GameRepresentation> getGameByPseudonym(String pseudonym) {
+        return gameService.findGameByPseudonym(pseudonym);
     }
 }

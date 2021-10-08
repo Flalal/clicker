@@ -37,6 +37,19 @@ public class GameRepository {
         return model;
     }
 
+    public GameModel findGameByPseudonym(String pseudo) {
+        GameModel model = new GameModel();
+        jooq.select(GAME.asterisk(), PLAYER.asterisk(), GENERATOR.asterisk(), GAME_GENERATOR.asterisk())
+                .from(GAME)
+                .join(PLAYER).on(GAME.PLAYER_ID.eq(PLAYER.ID))
+                .leftJoin(GAME_GENERATOR).on(GAME_GENERATOR.ID_GAME.eq(GAME.ID))
+                .leftJoin(GENERATOR).on(GENERATOR.ID.eq(GAME_GENERATOR.ID_GENERATOR))
+                .where(PLAYER.PSEUDONYM.equalIgnoreCase(pseudo))
+                .fetch()
+                .forEach(record -> populateGameModel(model, record));
+        return model;
+    }
+
     private void populateGameModel(GameModel model, org.jooq.Record record) {
         model.setGameRecord(record.into(GameRecord.class));
         model.setPlayerRecord(record.into(PlayerRecord.class));
