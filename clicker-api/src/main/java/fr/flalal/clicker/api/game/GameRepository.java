@@ -10,6 +10,9 @@ import org.jooq.DSLContext;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 import static fr.flalal.clicker.storage.Tables.*;
@@ -45,4 +48,14 @@ public class GameRepository {
         }
     }
 
+    public int createGameByPlayerId(UUID playerId) {
+        return jooq.insertInto(GAME)
+                .set(GAME.ID, UUID.randomUUID())
+                .set(GAME.PLAYER_ID, playerId)
+                .set(GAME.CREATED_AT, OffsetDateTime.now())
+                .set(GAME.UPDATED_AT, OffsetDateTime.now())
+                .set(GAME.MONEY, new BigDecimal(0))
+                .set(GAME.MANUAL_CLICK, new BigDecimal(0))
+                .execute();
+    }
 }

@@ -14,11 +14,11 @@ CREATE TABLE player
 CREATE TABLE game
 (
     id           UUID PRIMARY KEY,
-    player_id    UUID REFERENCES player NOT NULL,
-    money        NUMERIC                NOT NULL DEFAULT 0,
-    manual_click NUMERIC                NOT NULL DEFAULT 0,
-    created_at   TIMESTAMP              NOT NULL,
-    updated_at   TIMESTAMP              NOT NULL
+    player_id    UUID REFERENCES player   NOT NULL,
+    money        NUMERIC                  NOT NULL DEFAULT 0,
+    manual_click NUMERIC                  NOT NULL DEFAULT 0,
+    created_at   TIMESTAMP WITH TIME ZONE NOT NULL,
+    updated_at   TIMESTAMP WITH TIME ZONE NOT NULL
 );
 
 CREATE TABLE generator
@@ -36,9 +36,9 @@ CREATE TABLE game_generator
 (
     id_game         UUID REFERENCES game,
     id_generator    UUID REFERENCES generator,
-    level           INTEGER   NOT NULL,
-    generated_click NUMERIC   NOT NULL DEFAULT 0,
-    created_at      TIMESTAMP NOT NULL,
-    updated_at      TIMESTAMP NOT NULL,
+    level           INTEGER                  NOT NULL,
+    generated_click NUMERIC                  NOT NULL DEFAULT 0,
+    created_at      TIMESTAMP WITH TIME ZONE NOT NULL,
+    updated_at      TIMESTAMP WITH TIME ZONE NOT NULL,
     PRIMARY KEY (id_game, id_generator)
 );

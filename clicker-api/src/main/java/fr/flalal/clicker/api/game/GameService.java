@@ -1,7 +1,9 @@
 package fr.flalal.clicker.api.game;
 
 import fr.flalal.clicker.api.Converter;
+import fr.flalal.clicker.api.error.InternalDatabaseServeurException;
 import fr.flalal.clicker.api.representation.GameRepresentation;
+import fr.flalal.clicker.storage.tables.records.PlayerRecord;
 import lombok.AllArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
@@ -38,5 +40,12 @@ public class GameService {
 //                });
 
         return draft;
+    }
+
+    public void createGame(UUID playerId) {
+        int nbRow = repository.createGameByPlayerId(playerId);
+        if (nbRow != 1) {
+            throw new InternalDatabaseServeurException("Can not create game during creation of player : " + playerId);
+        }
     }
 }

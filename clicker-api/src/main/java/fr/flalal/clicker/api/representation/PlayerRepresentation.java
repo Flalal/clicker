@@ -10,7 +10,7 @@ import java.util.UUID;
 public class PlayerRepresentation {
     private UUID id;
     private String firstName;
-    private String lastname;
+    private String lastName;
     private String email;
     private String pseudonym;
     private UserRoleType role;

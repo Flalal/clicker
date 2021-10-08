@@ -17,7 +17,6 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
 
-@Mapper(uses = Converter.DateMapper.class)
 public interface Converter {
 
     PlayerRepresentation toPlayerRepresentation(PlayerRecord record);
@@ -39,15 +38,10 @@ public interface Converter {
         representation.setManualClick(new ManualClickRepresentation(model.getGameRecord().getManualClick()));
         representation.setPlayer(this.toPlayerRepresentation(model.getPlayerRecord()));
         representation.setGenerators(this.toGeneratorsRepresentation(model.getGeneratorModels()));
-        representation.setCreatedAt(OffsetDateTime.of(model.getGameRecord().getCreatedAt(), ZoneOffset.UTC));
-        representation.setUpdatedAt(OffsetDateTime.of(model.getGameRecord().getUpdatedAt(), ZoneOffset.UTC));
+        representation.setCreatedAt(model.getGameRecord().getCreatedAt());
+        representation.setUpdatedAt(model.getGameRecord().getUpdatedAt());
 
         return representation;
     }
 
-    class DateMapper {
-        public OffsetDateTime map(LocalDateTime date) {
-            return OffsetDateTime.of(date, ZoneOffset.UTC);
-        }
-    }
 }

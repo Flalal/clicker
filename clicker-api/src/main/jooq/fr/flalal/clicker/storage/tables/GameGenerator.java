@@ -9,7 +9,7 @@ import fr.flalal.clicker.storage.Keys;
 import fr.flalal.clicker.storage.tables.records.GameGeneratorRecord;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -73,12 +73,12 @@ public class GameGenerator extends TableImpl<GameGeneratorRecord> {
     /**
      * The column <code>clicker.game_generator.created_at</code>.
      */
-    public final TableField<GameGeneratorRecord, LocalDateTime> CREATED_AT = createField(DSL.name("created_at"), SQLDataType.LOCALDATETIME(6).nullable(false), this, "");
+    public final TableField<GameGeneratorRecord, OffsetDateTime> CREATED_AT = createField(DSL.name("created_at"), SQLDataType.TIMESTAMPWITHTIMEZONE(6).nullable(false), this, "");
 
     /**
      * The column <code>clicker.game_generator.updated_at</code>.
      */
-    public final TableField<GameGeneratorRecord, LocalDateTime> UPDATED_AT = createField(DSL.name("updated_at"), SQLDataType.LOCALDATETIME(6).nullable(false), this, "");
+    public final TableField<GameGeneratorRecord, OffsetDateTime> UPDATED_AT = createField(DSL.name("updated_at"), SQLDataType.TIMESTAMPWITHTIMEZONE(6).nullable(false), this, "");
 
     private GameGenerator(Name alias, Table<GameGeneratorRecord> aliased) {
         this(alias, aliased, null);
@@ -181,7 +181,7 @@ public class GameGenerator extends TableImpl<GameGeneratorRecord> {
     // -------------------------------------------------------------------------
 
     @Override
-    public Row6<UUID, UUID, Integer, BigDecimal, LocalDateTime, LocalDateTime> fieldsRow() {
+    public Row6<UUID, UUID, Integer, BigDecimal, OffsetDateTime, OffsetDateTime> fieldsRow() {
         return (Row6) super.fieldsRow();
     }
 }
