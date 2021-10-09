@@ -53,10 +53,19 @@ public class GameService {
     GameRepresentation compareGame(GameRepresentation stored, GameRepresentation draft) {
         long secondDiff = (OffsetDateTime.now().toEpochSecond() - stored.getUpdatedAt().toEpochSecond());
 
+        checkMoney(stored, draft, secondDiff);
         checkManualClick(stored, draft, secondDiff);
         checkGeneratorClick(stored, draft, secondDiff);
 
         return converter.toGameRepresentation(repository.findGameById(stored.getId()));
+    }
+
+    private void checkMoney(GameRepresentation stored, GameRepresentation draft, long secondDiff) {
+        // TODO check here
+        int nbRow = repository.updateMoney(stored.getId(), draft.getMoney());
+        if (nbRow != 1) {
+            throw new InternalDatabaseServeurException("Update of money failed");
+        }
     }
 
     private void checkGeneratorClick(GameRepresentation stored, GameRepresentation draft, long secondDiff) {
@@ -90,7 +99,7 @@ public class GameService {
 
         int nbRow = repository.updateGameGenerator(draft.getId(), optionalGenerator.get().getId(), draftGenerator.getGeneratedClick(), draftGenerator.getLevel());
         if (nbRow != 1) {
-            throw new InternalDatabaseServeurException("Error on update");
+            throw new InternalDatabaseServeurException("Update of game generator failed");
         }
     }
 

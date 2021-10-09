@@ -85,4 +85,11 @@ public class GameRepository {
     public void createGameGenerator(GameGeneratorRecord draftGenerator) {
         jooq.batchInsert(draftGenerator).execute();
     }
+
+    public int updateMoney(UUID id, BigDecimal money) {
+        return jooq.update(GAME)
+                .set(GAME.MONEY, money)
+                .where(GAME.ID.eq(id))
+                .execute();
+    }
 }
