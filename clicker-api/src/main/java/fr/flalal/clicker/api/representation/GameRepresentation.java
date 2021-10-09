@@ -13,7 +13,7 @@ public class GameRepresentation {
     private UUID id;
     private BigDecimal money;
     private PlayerRepresentation player;
-    private ManualClickRepresentation manualClick;
+    private BigDecimal manualClickCount;
     private List<GeneratorRepresentation> generators = new ArrayList<>();
     private OffsetDateTime createdAt;
     private OffsetDateTime updatedAt;

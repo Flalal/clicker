@@ -30,12 +30,12 @@ public interface Converter {
     default GameRepresentation toGameRepresentation(GameModel model) {
         GameRepresentation representation = new GameRepresentation();
         if (model.getGameRecord() == null) {
-            throw new ResourceNotFoundException("No game here");
+            throw new ResourceNotFoundException("No game found");
         }
 
         representation.setId(model.getGameRecord().getId());
         representation.setMoney(model.getGameRecord().getMoney());
-        representation.setManualClick(new ManualClickRepresentation(model.getGameRecord().getManualClick()));
+        representation.setManualClickCount(model.getGameRecord().getManualClick());
         representation.setPlayer(this.toPlayerRepresentation(model.getPlayerRecord()));
         representation.setGenerators(this.toGeneratorsRepresentation(model.getGeneratorModels()));
         representation.setCreatedAt(model.getGameRecord().getCreatedAt());

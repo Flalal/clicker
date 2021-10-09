@@ -13,3 +13,6 @@ spring:
     url: jdbc:postgresql://localhost:5432/clicker_db
     username: clicker_api
     password: password
+
+clicker-api:
+  average-human-click-per-second: 10
