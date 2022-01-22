@@ -5,21 +5,20 @@ import fr.flalal.clicker.api.game.GameModel;
 import fr.flalal.clicker.api.game.GeneratorModel;
 import fr.flalal.clicker.api.representation.GameRepresentation;
 import fr.flalal.clicker.api.representation.GeneratorRepresentation;
-import fr.flalal.clicker.api.representation.ManualClickRepresentation;
 import fr.flalal.clicker.api.representation.PlayerRepresentation;
 import fr.flalal.clicker.storage.tables.records.GameGeneratorRecord;
 import fr.flalal.clicker.storage.tables.records.GeneratorRecord;
 import fr.flalal.clicker.storage.tables.records.PlayerRecord;
 import org.mapstruct.Mapper;
 
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
 import java.util.List;
 
+@Mapper
 public interface Converter {
 
     PlayerRepresentation toPlayerRepresentation(PlayerRecord record);
+
+    GeneratorRepresentation toGeneratorRepresentation(GeneratorModel models);
 
     List<GeneratorRepresentation> toGeneratorsRepresentation(List<GeneratorModel> models);
 
