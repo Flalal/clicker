@@ -1,0 +1,204 @@
+{
+	"info": {
+		"_postman_id": "8b61f2e7-2d32-4d2d-8eb4-931d3c75ac0d",
+		"name": "Clicker",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Player",
+			"item": [
+				{
+					"name": "POST - Player",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"Florian\",\r\n    \"lastName\": \"Flahaut\",\r\n    \"email\": \"florian-flahaut@hotmail.fr\",\r\n    \"pseudonym\": \"Flal\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v0/players",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v0",
+								"players"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET - All players",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"Florian\",\r\n    \"lastName\": \"Flahaut\",\r\n    \"email\": \"florian-flahaut@hotmail.fr\",\r\n    \"pseudonym\": \"Flal\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v0/players",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v0",
+								"players"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET - Player by id",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"Florian\",\r\n    \"lastName\": \"Flahaut\",\r\n    \"email\": \"florian-flahaut@hotmail.fr\",\r\n    \"pseudonym\": \"Flal\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v0/players/flal",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v0",
+								"players",
+								"flal"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET - Player Game",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"Florian\",\r\n    \"lastName\": \"Flahaut\",\r\n    \"email\": \"florian-flahaut@hotmail.fr\",\r\n    \"pseudonym\": \"Flal\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v0/players/flal/games",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v0",
+								"players",
+								"flal",
+								"games"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Game",
+			"item": [
+				{
+					"name": "GET - Game by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v0/games/348ccb3c-fe1e-46ea-86a0-b725436582fc",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v0",
+								"games",
+								"348ccb3c-fe1e-46ea-86a0-b725436582fc"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT - Game update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"348ccb3c-fe1e-46ea-86a0-b725436582fc\",\r\n    \"money\": 50000000000000000,\r\n    \"manualClickCount\": 5000,\r\n    \"player\": {\r\n        \"id\": \"113370e1-2df8-4063-9b7b-9254a8a473f7\",\r\n        \"firstName\": \"Florian\",\r\n        \"lastName\": \"Flahaut\",\r\n        \"email\": \"florian-flahaut@hotmail.fr\",\r\n        \"pseudonym\": \"Flal\",\r\n        \"role\": \"USER\"\r\n},\r\n    \"generators\": [\r\n        {\r\n            \"id\": null,\r\n            \"level\": 0,\r\n            \"name\": null,\r\n            \"description\": null,\r\n            \"generatedClick\": null,\r\n            \"baseCost\": null,\r\n            \"baseMultiplier\": null,\r\n            \"baseClickPerSecond\": null,\r\n            \"createdAt\": null,\r\n            \"updatedAt\": null\r\n        }\r\n        ],\r\n    \"createdAt\": \"2022-01-22T17:40:47.060821+01:00\",\r\n    \"updatedAt\": \"2022-01-22T17:40:47.060821+01:00\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v0/games/348ccb3c-fe1e-46ea-86a0-b725436582fc",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v0",
+								"games",
+								"348ccb3c-fe1e-46ea-86a0-b725436582fc"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
