@@ -3,8 +3,7 @@ package fr.flalal.clicker.api.game;
 import fr.flalal.clicker.api.Converter;
 import fr.flalal.clicker.api.configuration.ClickerProperties;
 import fr.flalal.clicker.api.error.HackerException;
-import fr.flalal.clicker.api.error.InternalDatabaseServeurException;
-import fr.flalal.clicker.api.error.ResourceNotFoundException;
+import fr.flalal.clicker.api.error.InternalDatabaseServerException;
 import fr.flalal.clicker.api.generator.GeneratorService;
 import fr.flalal.clicker.api.representation.GameRepresentation;
 import fr.flalal.clicker.api.representation.GeneratorRepresentation;
@@ -53,22 +52,23 @@ public class GameService {
     GameRepresentation compareGame(GameRepresentation stored, GameRepresentation draft) {
         long secondDiff = (OffsetDateTime.now().toEpochSecond() - stored.getUpdatedAt().toEpochSecond());
 
-        checkMoney(stored, draft, secondDiff);
-        checkManualClick(stored, draft, secondDiff);
-        checkGeneratorClick(stored, draft, secondDiff);
+        checkAndUpdateMoney(stored, draft, secondDiff);
+        checkAndUpdateManualClick(stored, draft, secondDiff);
+        checkAndUpdateGeneratorClick(stored, draft, secondDiff);
 
         return converter.toGameRepresentation(repository.findGameById(stored.getId()));
     }
 
-    private void checkMoney(GameRepresentation stored, GameRepresentation draft, long secondDiff) {
+    private void checkAndUpdateMoney(GameRepresentation stored, GameRepresentation draft, long secondDiff) {
         // TODO check here
         int nbRow = repository.updateMoney(stored.getId(), draft.getMoney());
         if (nbRow != 1) {
-            throw new InternalDatabaseServeurException("Update of money failed");
+            log.error("Update of money failed");
+            throw new InternalDatabaseServerException("Update of money failed");
         }
     }
 
-    private void checkGeneratorClick(GameRepresentation stored, GameRepresentation draft, long secondDiff) {
+    private void checkAndUpdateGeneratorClick(GameRepresentation stored, GameRepresentation draft, long secondDiff) {
         List<GeneratorRepresentation> storedGenerators = stored.getGenerators();
         List<GeneratorRepresentation> draftGenerators = draft.getGenerators();
         List<GeneratorRecord> allGenerator = generatorService.findGeneratorsByIds(collectGeneratorIds(storedGenerators, draftGenerators));
@@ -86,7 +86,9 @@ public class GameService {
                 .findFirst();
 
         if (optionalGenerator.isEmpty()) {
-            throw new ResourceNotFoundException("Generator not found maybe a hacker");
+            log.error("Generator not found maybe for generator id : {}", draftGenerator.getId());
+            return;
+//            throw new ResourceNotFoundException("Generator not found maybe a hacker");
         }
 
         if (optionalStoredGenerator.isEmpty()) {
@@ -99,7 +101,8 @@ public class GameService {
 
         int nbRow = repository.updateGameGenerator(draft.getId(), optionalGenerator.get().getId(), draftGenerator.getGeneratedClick(), draftGenerator.getLevel());
         if (nbRow != 1) {
-            throw new InternalDatabaseServeurException("Update of game generator failed");
+            log.error("Update of game generator failed");
+            throw new InternalDatabaseServerException("Update of game generator failed");
         }
     }
 
@@ -108,6 +111,7 @@ public class GameService {
         BigDecimal maxGeneratedClick = generator.getBaseMultiplier().multiply(new BigDecimal(draftLevel)).multiply(new BigDecimal(secondDiff));
         BigDecimal generatedClickSinceLastUpdate = draftGenerator.getGeneratedClick().subtract(storedGenerator.getGeneratedClick());
         if (maxGeneratedClick.compareTo(generatedClickSinceLastUpdate) <= 0) {
+            log.error("Hacker detected");
             throw new HackerException("Hacker detected");
         }
     }
@@ -115,6 +119,7 @@ public class GameService {
     private void createNewGameGenerator(UUID gameId, GeneratorRepresentation draftGenerator, GeneratorRecord generator) {
         // Must be lvl 1
         if (draftGenerator.getLevel() != 1) {
+            log.error("New Game generator not lvl 1");
             throw new HackerException("New Game generator not lvl 1");
         }
         GameGeneratorRecord gameGeneratorRecord = new GameGeneratorRecord();
@@ -133,19 +138,24 @@ public class GameService {
                 .collect(Collectors.toSet());
     }
 
-    private void checkManualClick(GameRepresentation stored, GameRepresentation draft, long secondDiff) {
-        BigDecimal maxPossibleManualClick = new BigDecimal(clickerProperties.getAverageHumanClickPerSecond() * secondDiff);
+    private void checkAndUpdateManualClick(GameRepresentation stored, GameRepresentation draft, long secondDiff) {
+        BigDecimal maxManualPossibleClick = new BigDecimal(clickerProperties.getAverageHumanClickPerSecond() * secondDiff);
         BigDecimal manualClickAdded = draft.getManualClickCount().subtract(stored.getManualClickCount());
-        if (manualClickAdded.compareTo(maxPossibleManualClick) >= 0) {
+        if (manualClickAdded.compareTo(maxManualPossibleClick) >= 0) {
             log.error("HACKED DETECTED PLAYER ID : " + stored.getPlayer().getId());
             throw new HackerException("Hacker detected");
+        }
+        int nbRow = repository.updateManualClick(stored.getId(), draft.getManualClickCount());
+        if (nbRow != 1) {
+            log.error("Can update manual click for game : {}", stored.getId());
         }
     }
 
     public void createGame(UUID playerId) {
         int nbRow = repository.createGameByPlayerId(playerId);
         if (nbRow != 1) {
-            throw new InternalDatabaseServeurException("Can not create game during creation of player : " + playerId);
+            log.error("Can not create game during creation of player : {}", playerId);
+            throw new InternalDatabaseServerException("Can not create game during creation of player : " + playerId);
         }
     }
 }

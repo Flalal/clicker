@@ -20,7 +20,6 @@ import static fr.flalal.clicker.storage.Tables.GENERATOR;
 public class GeneratorService {
 
     private final GeneratorRepository repository;
-    private final Converter converter = Mappers.getMapper(Converter.class);
 
 
     public List<GeneratorRecord> findGeneratorsByIds(Set<UUID> generatorIds) {

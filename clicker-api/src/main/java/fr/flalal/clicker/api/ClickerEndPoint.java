@@ -11,6 +11,6 @@ public class ClickerEndPoint {
 
     @RequestMapping
     public Mono<ResponseEntity<String>> getTest() {
-        return Mono.just(ResponseEntity.ok("V0"));
+        return Mono.just(ResponseEntity.ok("0.1.0"));
     }
 }

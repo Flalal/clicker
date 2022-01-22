@@ -1,6 +1,5 @@
 package fr.flalal.clicker.api.player;
 
-import fr.flalal.clicker.storage.enums.UserRoleType;
 import lombok.Builder;
 import lombok.Data;
 

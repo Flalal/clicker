@@ -56,7 +56,7 @@ public class GameRepository {
         GeneratorRecord generatorRecord = record.into(GeneratorRecord.class);
         GameGeneratorRecord gameGeneratorRecord = record.into(GameGeneratorRecord.class);
         GeneratorModel generatorModel = converter.toGeneratorModel(generatorRecord, gameGeneratorRecord);
-        if (generatorModel != null) {
+        if (generatorModel != null && generatorModel.getId() != null) {
             model.getGeneratorModels().add(generatorModel);
         }
     }
@@ -91,5 +91,14 @@ public class GameRepository {
                 .set(GAME.MONEY, money)
                 .where(GAME.ID.eq(id))
                 .execute();
+    }
+
+    public int updateManualClick(UUID id, BigDecimal manualClickCount) {
+        return jooq.update(GAME)
+                .set(GAME.MANUAL_CLICK, manualClickCount)
+                .where(GAME.ID.eq(id))
+                .execute();
+
+
     }
 }
