@@ -91,15 +91,20 @@ public class GameService {
 //            throw new ResourceNotFoundException("Generator not found maybe a hacker");
         }
 
+        BigDecimal generatedClickByGenerator = BigDecimal.ZERO;
         if (optionalStoredGenerator.isEmpty()) {
             createNewGameGenerator(draft.getId(), draftGenerator, optionalGenerator.get());
         } else {
             GeneratorRecord generator = optionalGenerator.get();
             GeneratorRepresentation storedGenerator = optionalStoredGenerator.get();
             checkGeneratedClickAlreadyInGame(secondDiff, draftGenerator, generator, storedGenerator);
+            generatedClickByGenerator = draftGenerator.getGeneratedClick();
         }
 
-        int nbRow = repository.updateGameGenerator(draft.getId(), optionalGenerator.get().getId(), draftGenerator.getGeneratedClick(), draftGenerator.getLevel());
+        // With generated click and check value of actual lvl
+        // TODO check draftGenerator.getLevel() from front
+
+        int nbRow = repository.updateGameGenerator(draft.getId(), optionalGenerator.get().getId(), generatedClickByGenerator, draftGenerator.getLevel());
         if (nbRow != 1) {
             log.error("Update of game generator failed");
             throw new InternalDatabaseServerException("Update of game generator failed");

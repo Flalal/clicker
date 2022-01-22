@@ -98,7 +98,5 @@ public class GameRepository {
                 .set(GAME.MANUAL_CLICK, manualClickCount)
                 .where(GAME.ID.eq(id))
                 .execute();
-
-
     }
 }
