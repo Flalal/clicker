@@ -243,6 +243,38 @@
 				</plugins>
 			</build>
 		</profile>
+		<profile>
+			<!-- only typegen when we need it build faster on ci coz we dont import lark-slot-api -->
+			<id>typegen</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>cz.habarta.typescript-generator</groupId>
+						<artifactId>typescript-generator-maven-plugin</artifactId>
+						<version>2.36.1070</version>
+						<executions>
+							<execution>
+								<id>generate</id>
+								<goals>
+									<goal>generate</goal>
+								</goals>
+								<phase>generate-sources</phase>
+							</execution>
+						</executions>
+						<configuration>
+							<jsonLibrary>jackson2</jsonLibrary>
+							<classPatterns>
+								<classPattern>fr.flalal.clicker.api.representation.*</classPattern>
+							</classPatterns>
+							<outputFile>../clicker-front/src/generated/clicker-api-types.ts</outputFile>
+							<outputFileType>implementationFile</outputFileType>
+							<outputKind>module</outputKind>
+							<mapEnum>asEnum</mapEnum>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
 
 	</profiles>
 </project>
