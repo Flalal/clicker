@@ -87,8 +87,6 @@ public class GameService {
 
         if (optionalGenerator.isEmpty()) {
             log.error("Generator not found maybe for generator id : {}", draftGenerator.getId());
-            return;
-//            throw new ResourceNotFoundException("Generator not found maybe a hacker");
         }
 
         BigDecimal generatedClickByGenerator = BigDecimal.ZERO;
