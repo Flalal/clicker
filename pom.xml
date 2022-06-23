@@ -11,6 +11,7 @@
 
     <modules>
         <module>clicker-api</module>
+        <module>clicker-front</module>
     </modules>
 
     <parent>
