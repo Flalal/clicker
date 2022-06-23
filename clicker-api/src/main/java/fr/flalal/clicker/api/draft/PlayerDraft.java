@@ -1,4 +1,4 @@
-package fr.flalal.clicker.api.player;
+package fr.flalal.clicker.api.draft;
 
 import lombok.Builder;
 import lombok.Data;

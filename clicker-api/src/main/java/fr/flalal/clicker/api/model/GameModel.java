@@ -1,4 +1,4 @@
-package fr.flalal.clicker.api.game;
+package fr.flalal.clicker.api.model;
 
 import fr.flalal.clicker.storage.tables.records.GameRecord;
 import fr.flalal.clicker.storage.tables.records.PlayerRecord;

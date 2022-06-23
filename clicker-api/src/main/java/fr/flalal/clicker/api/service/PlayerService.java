@@ -1,9 +1,10 @@
-package fr.flalal.clicker.api.player;
+package fr.flalal.clicker.api.service;
 
 import fr.flalal.clicker.api.Converter;
 import fr.flalal.clicker.api.error.NoContentException;
 import fr.flalal.clicker.api.error.ResourceNotFoundException;
-import fr.flalal.clicker.api.game.GameService;
+import fr.flalal.clicker.api.draft.PlayerDraft;
+import fr.flalal.clicker.api.repository.PlayerRepository;
 import fr.flalal.clicker.api.representation.GameRepresentation;
 import fr.flalal.clicker.api.representation.PlayerRepresentation;
 import fr.flalal.clicker.storage.tables.records.PlayerRecord;

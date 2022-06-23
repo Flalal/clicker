@@ -1,18 +1,14 @@
-package fr.flalal.clicker.api.generator;
+package fr.flalal.clicker.api.service;
 
-import fr.flalal.clicker.api.Converter;
+import fr.flalal.clicker.api.repository.GeneratorRepository;
 import fr.flalal.clicker.storage.tables.records.GeneratorRecord;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jooq.DSLContext;
-import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-
-import static fr.flalal.clicker.storage.Tables.GENERATOR;
 
 @Service
 @AllArgsConstructor

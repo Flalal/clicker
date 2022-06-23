@@ -1,6 +1,7 @@
-package fr.flalal.clicker.api.game;
+package fr.flalal.clicker.api.endpoint;
 
 import fr.flalal.clicker.api.error.PreconditionFailedException;
+import fr.flalal.clicker.api.service.GameService;
 import fr.flalal.clicker.api.representation.GameRepresentation;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;

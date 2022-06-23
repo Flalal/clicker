@@ -1,5 +1,6 @@
-package fr.flalal.clicker.api.player;
+package fr.flalal.clicker.api.repository;
 
+import fr.flalal.clicker.api.draft.PlayerDraft;
 import fr.flalal.clicker.storage.enums.UserRoleType;
 import fr.flalal.clicker.storage.tables.records.PlayerRecord;
 import lombok.AllArgsConstructor;

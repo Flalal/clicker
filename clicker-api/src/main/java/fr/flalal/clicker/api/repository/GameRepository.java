@@ -1,6 +1,8 @@
-package fr.flalal.clicker.api.game;
+package fr.flalal.clicker.api.repository;
 
 import fr.flalal.clicker.api.Converter;
+import fr.flalal.clicker.api.model.GameModel;
+import fr.flalal.clicker.api.model.GeneratorModel;
 import fr.flalal.clicker.storage.tables.records.GameGeneratorRecord;
 import fr.flalal.clicker.storage.tables.records.GameRecord;
 import fr.flalal.clicker.storage.tables.records.GeneratorRecord;

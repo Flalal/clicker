@@ -1,10 +1,10 @@
-package fr.flalal.clicker.api.game;
+package fr.flalal.clicker.api.service;
 
 import fr.flalal.clicker.api.Converter;
 import fr.flalal.clicker.api.configuration.ClickerProperties;
 import fr.flalal.clicker.api.error.HackerException;
 import fr.flalal.clicker.api.error.InternalDatabaseServerException;
-import fr.flalal.clicker.api.generator.GeneratorService;
+import fr.flalal.clicker.api.repository.GameRepository;
 import fr.flalal.clicker.api.representation.GameRepresentation;
 import fr.flalal.clicker.api.representation.GeneratorRepresentation;
 import fr.flalal.clicker.storage.tables.records.GameGeneratorRecord;

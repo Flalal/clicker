@@ -1,8 +1,8 @@
 package fr.flalal.clicker.api;
 
 import fr.flalal.clicker.api.error.ResourceNotFoundException;
-import fr.flalal.clicker.api.game.GameModel;
-import fr.flalal.clicker.api.game.GeneratorModel;
+import fr.flalal.clicker.api.model.GameModel;
+import fr.flalal.clicker.api.model.GeneratorModel;
 import fr.flalal.clicker.api.representation.GameRepresentation;
 import fr.flalal.clicker.api.representation.GeneratorRepresentation;
 import fr.flalal.clicker.api.representation.PlayerRepresentation;

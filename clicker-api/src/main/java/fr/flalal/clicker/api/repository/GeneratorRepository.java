@@ -1,4 +1,4 @@
-package fr.flalal.clicker.api.generator;
+package fr.flalal.clicker.api.repository;
 
 import fr.flalal.clicker.storage.tables.records.GeneratorRecord;
 import lombok.AllArgsConstructor;

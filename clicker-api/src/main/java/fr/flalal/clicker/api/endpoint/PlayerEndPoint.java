@@ -1,6 +1,8 @@
-package fr.flalal.clicker.api.player;
+package fr.flalal.clicker.api.endpoint;
 
 import fr.flalal.clicker.api.error.ResourceNotFoundException;
+import fr.flalal.clicker.api.draft.PlayerDraft;
+import fr.flalal.clicker.api.service.PlayerService;
 import fr.flalal.clicker.api.representation.GameRepresentation;
 import fr.flalal.clicker.api.representation.PlayerRepresentation;
 import lombok.AllArgsConstructor;
