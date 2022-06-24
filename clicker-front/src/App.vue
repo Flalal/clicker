@@ -9,12 +9,6 @@
 export default {
   name: 'App',
   components: {
-  },
-  methods: {
-    fetch() {
-      let info: RequestInfo = undefined;
-      fetch()
-    }
   }
 }
 </script>
