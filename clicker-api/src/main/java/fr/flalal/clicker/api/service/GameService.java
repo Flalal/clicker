@@ -96,7 +96,7 @@ public class GameService {
             GeneratorRecord generator = optionalGenerator.get();
             GeneratorRepresentation storedGenerator = optionalStoredGenerator.get();
             checkGeneratedClickAlreadyInGame(secondDiff, draftGenerator, generator, storedGenerator);
-            generatedClickByGenerator = draftGenerator.getGeneratedClick();
+            generatedClickByGenerator = draftGenerator.getGeneratedClick().subtract(storedGenerator.getGeneratedClick()).longValue() > 0 ? draftGenerator.getGeneratedClick() : storedGenerator.getGeneratedClick() ;
         }
 
         // With generated click and check value of actual lvl
