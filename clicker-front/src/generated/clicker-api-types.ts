@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 2.36.1070 on 2022-06-23 22:52:10.
+// Generated using typescript-generator version 2.36.1070 on 2022-07-21 13:57:48.
 
 export interface GameRepresentation {
     id: string;

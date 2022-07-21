@@ -28,6 +28,9 @@ public class PlayerEndPoint {
             throw e;
         }
     }
+
+    // FIXME
+    @CrossOrigin("*")
     @GetMapping("/{pseudonym}/games")
     public Mono<GameRepresentation> getGameByPseudonym(@PathVariable String pseudonym) {
         try {
