@@ -1,5 +1,4 @@
-
-import { defineStore } from "pinia";
+import {defineStore} from "pinia";
 import {GameRepresentation} from "@/generated/clicker-api-types";
 
 export type ClickerState = {

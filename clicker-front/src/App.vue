@@ -1,23 +1,24 @@
 <template>
-  <h1>{{this.game}}</h1>
+  <h1>{{this.$refs.game}}</h1>
 
 </template>
 
-<script lang="ts">
-import { defineComponent, onMounted, ref } from "vue";
+<script lang="ts" setup>
 import { useMainStore } from "./store/index";
 import {GameRepresentation} from "@/generated/clicker-api-types";
+import {VueElement} from "vue";
 
-export default defineComponent({
-  name: "App",
-  setup() {
-    const game = ref<GameRepresentation>();
+
+export default class App extends VueElement {
+
+  private game?: GameRepresentation;
+
+  mounted() {
     const mainStore = useMainStore();
-    onMounted(() => {
-      mainStore.fetchGameByPseudo().then(value => game.value = value);
-    });
-  },
-});
+    mainStore.fetchGameByPseudo().then(value => this.game = value);
+  }
+}
+
 </script>
 
 <style>
