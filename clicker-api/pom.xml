@@ -122,7 +122,7 @@
 
 				<configuration>
 					<driver>org.postgresql.Driver</driver>
-					<url>jdbc:postgresql://localhost:5432/clicker_db</url>
+					<url>jdbc:postgresql://192.168.1.26:5432/clicker_db</url>
 					<user>clicker_api</user>
 					<password>password</password>
 					<baselineOnMigrate>true</baselineOnMigrate>
@@ -173,7 +173,7 @@
 					<plugin>
 						<groupId>org.flywaydb</groupId>
 						<artifactId>flyway-maven-plugin</artifactId>
-						<version>5.2.1</version>
+						<version>9.12.0</version>
 						<executions>
 							<execution>
 								<phase>generate-sources</phase>
@@ -183,7 +183,7 @@
 							</execution>
 						</executions>
 						<configuration>
-							<url>jdbc:postgresql://localhost:5432/clicker_db</url>
+							<url>jdbc:postgresql://192.168.1.26:5432/clicker_db</url>
 							<user>clicker_api</user>
 							<password>password</password>
 							<schemas>
@@ -201,7 +201,7 @@
 						<version>3.14.8</version>
 						<configuration>
 							<jdbc>
-								<url>jdbc:postgresql://localhost:5432/clicker_db</url>
+								<url>jdbc:postgresql://192.168.1.26:5432/clicker_db</url>
 								<user>clicker_api</user>
 								<password>password</password>
 							</jdbc>
@@ -239,38 +239,6 @@
 								</goals>
 							</execution>
 						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-		<profile>
-			<!-- only typegen when we need it build faster on ci coz we dont import lark-slot-api -->
-			<id>typegen</id>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>cz.habarta.typescript-generator</groupId>
-						<artifactId>typescript-generator-maven-plugin</artifactId>
-						<version>2.36.1070</version>
-						<executions>
-							<execution>
-								<id>generate</id>
-								<goals>
-									<goal>generate</goal>
-								</goals>
-								<phase>generate-sources</phase>
-							</execution>
-						</executions>
-						<configuration>
-							<jsonLibrary>jackson2</jsonLibrary>
-							<classPatterns>
-								<classPattern>fr.flalal.clicker.api.representation.*</classPattern>
-							</classPatterns>
-							<outputFile>../clicker-front/src/generated/clicker-api-types.ts</outputFile>
-							<outputFileType>implementationFile</outputFileType>
-							<outputKind>module</outputKind>
-							<mapEnum>asEnum</mapEnum>
-						</configuration>
 					</plugin>
 				</plugins>
 			</build>
