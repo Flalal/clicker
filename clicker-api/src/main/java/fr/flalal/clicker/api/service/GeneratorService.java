@@ -5,6 +5,7 @@ import fr.flalal.clicker.storage.tables.records.GeneratorRecord;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 import java.util.Set;
@@ -18,7 +19,7 @@ public class GeneratorService {
     private final GeneratorRepository repository;
 
 
-    public List<GeneratorRecord> findGeneratorsByIds(Set<UUID> generatorIds) {
-        return repository.findGeneratorsByIds(generatorIds);
+    public Mono<List<GeneratorRecord>> findGeneratorsByIds(Set<UUID> generatorIds) {
+        return Mono.fromCallable(() -> repository.findGeneratorsByIds(generatorIds));
     }
 }

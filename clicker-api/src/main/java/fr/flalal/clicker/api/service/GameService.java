@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.math.BigDecimal;
@@ -25,9 +26,9 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Slf4j
 @Service
 @AllArgsConstructor
-@Slf4j
 public class GameService {
 
     private final GameRepository repository;
@@ -36,48 +37,55 @@ public class GameService {
     private final Converter converter = Mappers.getMapper(Converter.class);
 
     public Mono<GameRepresentation> findGameById(UUID id) {
-        return Mono.just(converter.toGameRepresentation(repository.findGameById(id)));
+        return Mono.fromCallable(() -> repository.findGameById(id))
+                .map(converter::toGameRepresentation);
     }
 
     public Mono<GameRepresentation> findGameByPseudonym(String pseudo) {
-        return Mono.just(converter.toGameRepresentation(repository.findGameByPseudonym(pseudo)));
+        return Mono.fromCallable(() -> repository.findGameByPseudonym(pseudo))
+                .map(converter::toGameRepresentation);
     }
 
     public Mono<GameRepresentation> updateGame(GameRepresentation draft) {
         return findGameById(draft.getId())
-                .map(gameStored -> compareGame(gameStored, draft));
+                .flatMap(gameStored -> compareGame(gameStored, draft));
     }
 
     @Transactional
-    GameRepresentation compareGame(GameRepresentation stored, GameRepresentation draft) {
+    Mono<GameRepresentation> compareGame(GameRepresentation stored, GameRepresentation draft) {
         long secondDiff = (OffsetDateTime.now().toEpochSecond() - stored.getUpdatedAt().toEpochSecond());
 
-        checkAndUpdateMoney(stored, draft, secondDiff);
-        checkAndUpdateManualClick(stored, draft, secondDiff);
-        checkAndUpdateGeneratorClick(stored, draft, secondDiff);
-
-        return converter.toGameRepresentation(repository.findGameById(stored.getId()));
+        return checkAndUpdateMoney(stored, draft, secondDiff)
+                .flatMap(nbRow -> checkAndUpdateManualClick(stored, draft, secondDiff))
+                .flatMap(nbRow -> checkAndUpdateGeneratorClick(stored, draft, secondDiff))
+                .flatMap(nbRows -> Mono.fromCallable(() -> repository.findGameById(stored.getId())))
+                .map(converter::toGameRepresentation);
     }
 
-    private void checkAndUpdateMoney(GameRepresentation stored, GameRepresentation draft, long secondDiff) {
+    private Mono<Integer> checkAndUpdateMoney(GameRepresentation stored, GameRepresentation draft, long secondDiff) {
         // TODO check here
-        int nbRow = repository.updateMoney(stored.getId(), draft.getMoney());
-        if (nbRow != 1) {
-            log.error("Update of money failed");
-            throw new InternalDatabaseServerException("Update of money failed");
-        }
+        return Mono.fromCallable(() -> repository.updateMoney(stored.getId(), draft.getMoney()))
+                .flatMap(nbRow -> {
+                    if (nbRow != 1) {
+                        log.error("Update of money failed");
+                        return Mono.error(new InternalDatabaseServerException("Update of money failed"));
+                    }
+                    return Mono.just(nbRow);
+                });
     }
 
-    private void checkAndUpdateGeneratorClick(GameRepresentation stored, GameRepresentation draft, long secondDiff) {
+    // FIXME : must be refactored to used fromCallable
+    private Mono<List<Integer>> checkAndUpdateGeneratorClick(GameRepresentation stored, GameRepresentation draft, long secondDiff) {
         List<GeneratorRepresentation> storedGenerators = stored.getGenerators();
         List<GeneratorRepresentation> draftGenerators = draft.getGenerators();
-        List<GeneratorRecord> allGenerator = generatorService.findGeneratorsByIds(collectGeneratorIds(storedGenerators, draftGenerators));
-        draftGenerators
-                .forEach(draftGenerator -> verifyAndUpdateGameGenerator(draft, secondDiff, storedGenerators, allGenerator, draftGenerator));
+        return generatorService.findGeneratorsByIds(collectGeneratorIds(storedGenerators, draftGenerators))
+                .flatMapMany(allGenerators -> Flux.fromIterable(draftGenerators)
+                        .flatMap(draftGenerator -> verifyAndUpdateGameGenerator(draft, secondDiff, storedGenerators, allGenerators, draftGenerator))
+                ).collectList();
 
     }
 
-    private void verifyAndUpdateGameGenerator(GameRepresentation draft, long secondDiff, List<GeneratorRepresentation> storedGenerators, List<GeneratorRecord> allGenerator, GeneratorRepresentation draftGenerator) {
+    private Mono<Integer> verifyAndUpdateGameGenerator(GameRepresentation draft, long secondDiff, List<GeneratorRepresentation> storedGenerators, List<GeneratorRecord> allGenerator, GeneratorRepresentation draftGenerator) {
         Optional<GeneratorRepresentation> optionalStoredGenerator = storedGenerators.stream()
                 .filter(generatorRepresentation -> draftGenerator.getId().equals(generatorRepresentation.getId()))
                 .findFirst();
@@ -89,8 +97,9 @@ public class GameService {
             log.error("Generator not found maybe for generator id : {}", draftGenerator.getId());
         }
 
-        BigDecimal generatedClickByGenerator = BigDecimal.ZERO;
+        BigDecimal generatedClickByGenerator;
         if (optionalStoredGenerator.isEmpty()) {
+            generatedClickByGenerator = BigDecimal.ZERO;
             createNewGameGenerator(draft.getId(), draftGenerator, optionalGenerator.get());
         } else {
             GeneratorRecord generator = optionalGenerator.get();
@@ -102,11 +111,14 @@ public class GameService {
         // With generated click and check value of actual lvl
         // TODO check draftGenerator.getLevel() from front
 
-        int nbRow = repository.updateGameGenerator(draft.getId(), optionalGenerator.get().getId(), generatedClickByGenerator, draftGenerator.getLevel());
-        if (nbRow != 1) {
-            log.error("Update of game generator failed");
-            throw new InternalDatabaseServerException("Update of game generator failed");
-        }
+        return Mono.fromCallable(() -> repository.updateGameGenerator(draft.getId(), optionalGenerator.get().getId(), generatedClickByGenerator, draftGenerator.getLevel()))
+                .flatMap(nbRow -> {
+                    if (nbRow != 1) {
+                        log.error("Update of game generator failed");
+                        return Mono.error(new InternalDatabaseServerException("Update of game generator failed"));
+                    }
+                    return Mono.just(nbRow);
+                });
     }
 
     private void checkGeneratedClickAlreadyInGame(long secondDiff, GeneratorRepresentation draftGenerator, GeneratorRecord generator, GeneratorRepresentation storedGenerator) {
@@ -141,24 +153,32 @@ public class GameService {
                 .collect(Collectors.toSet());
     }
 
-    private void checkAndUpdateManualClick(GameRepresentation stored, GameRepresentation draft, long secondDiff) {
+    private Mono<Integer> checkAndUpdateManualClick(GameRepresentation stored, GameRepresentation draft, long secondDiff) {
         BigDecimal maxManualPossibleClick = new BigDecimal(clickerProperties.getAverageHumanClickPerSecond() * secondDiff);
         BigDecimal manualClickAdded = draft.getManualClickCount().subtract(stored.getManualClickCount());
         if (manualClickAdded.compareTo(maxManualPossibleClick) >= 0) {
-            log.error("HACKED DETECTED PLAYER ID : " + stored.getPlayer().getId());
+            log.error("HACKER DETECTED PLAYER ID : " + stored.getPlayer().getId());
             throw new HackerException("Hacker detected");
         }
-        int nbRow = repository.updateManualClick(stored.getId(), draft.getManualClickCount());
-        if (nbRow != 1) {
-            log.error("Can update manual click for game : {}", stored.getId());
-        }
+
+        return Mono.fromCallable(() -> repository.updateManualClick(stored.getId(), draft.getManualClickCount()))
+                .map(nbRow -> {
+                    if (nbRow != 1) {
+                        log.error("Can update manual click for game : {}", stored.getId());
+                        return nbRow;
+                    }
+                    return nbRow;
+                });
     }
 
-    public void createGame(UUID playerId) {
-        int nbRow = repository.createGameByPlayerId(playerId);
-        if (nbRow != 1) {
-            log.error("Can not create game during creation of player : {}", playerId);
-            throw new InternalDatabaseServerException("Can not create game during creation of player : " + playerId);
-        }
+    public Mono<Integer> createGame(UUID playerId) {
+        return Mono.fromCallable(() -> repository.createGameByPlayerId(playerId))
+                .flatMap(nbRow -> {
+                    if (nbRow != 1) {
+                        log.error("Can not create game during creation of player : {}", playerId);
+                        return Mono.error(new InternalDatabaseServerException("Can not create game during creation of player : " + playerId));
+                    }
+                    return Mono.just(nbRow);
+                });
     }
 }

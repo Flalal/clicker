@@ -25,7 +25,7 @@ public class GameEndPoint {
 
     @PutMapping("/{id}")
     public Mono<GameRepresentation> updateGame(@PathVariable UUID id, @RequestBody GameRepresentation game) {
-        if (!game.getId().equals(id)) {
+        if (!id.equals(game.getId())) {
             throw new PreconditionFailedException("Try to update an id game different of id game in body");
         }
         return service.updateGame(game);

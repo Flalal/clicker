@@ -21,45 +21,24 @@ public class PlayerEndPoint {
 
     @GetMapping
     public Flux<PlayerRepresentation> getAllPlayers() {
-        try {
-            return service.getAllPlayers();
-        } catch (ResourceNotFoundException e) {
-            log.error(e.getMessage());
-            throw e;
-        }
+        return service.getAllPlayers();
     }
 
     // FIXME
     @CrossOrigin("*")
     @GetMapping("/{pseudonym}/games")
     public Mono<GameRepresentation> getGameByPseudonym(@PathVariable String pseudonym) {
-        try {
-            return service.getGameByPseudonym(pseudonym);
-        } catch (ResourceNotFoundException e) {
-            log.error(e.getMessage());
-            throw e;
-        }
+        return service.getGameByPseudonym(pseudonym);
     }
 
     @GetMapping("/{pseudonym}")
     public Mono<PlayerRepresentation> getPlayerByPseudonym(@PathVariable String pseudonym) {
-        try {
-            return service.getPlayerByPseudonym(pseudonym);
-        } catch (ResourceNotFoundException e) {
-            log.error(e.getMessage());
-            throw e;
-        }
+        return service.getPlayerByPseudonym(pseudonym);
     }
 
     @PostMapping
     public Mono<PlayerRepresentation> createPlayer(@RequestBody PlayerDraft draft) throws Exception {
         // TODO : validator on draft
-        try {
-            return service.createPlayer(draft);
-        } catch (Exception e) {
-            // TODO : log some good error
-            log.error("Error");
-            throw e;
-        }
+        return service.createPlayer(draft);
     }
 }

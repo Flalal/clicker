@@ -27,26 +27,22 @@ public class PlayerService {
     private final Converter converter = Mappers.getMapper(Converter.class);
 
     public Flux<PlayerRepresentation> getAllPlayers() {
-        List<PlayerRecord> playersRecord = repository.findAllPlayers();
-        if (playersRecord.isEmpty()) {
-            throw new NoContentException("No players in database");
-        }
-        return Flux.fromIterable(converter.toPlayersRepresentation(playersRecord));
+        return Mono.fromCallable(repository::findAllPlayers)
+                .flatMapIterable(playerRecords -> playerRecords)
+                .map(converter::toPlayerRepresentation);
     }
 
     @Transactional
     public Mono<PlayerRepresentation> createPlayer(@RequestBody PlayerDraft draft) throws Exception {
-        PlayerRecord playerRecord = repository.createPlayer(draft);
-        gameService.createGame(playerRecord.getId());
-        return Mono.just(converter.toPlayerRepresentation(playerRecord));
+        return Mono.fromCallable(() -> repository.createPlayer(draft))
+                .flatMap(playerRecord -> gameService.createGame(playerRecord.getId()).map(nbRow -> playerRecord))
+                .map(converter::toPlayerRepresentation);
     }
 
     public Mono<PlayerRepresentation> getPlayerByPseudonym(String pseudonym) {
-        PlayerRecord player = repository.findPlayerByPseudonym(pseudonym);
-        if (player == null) {
-            throw new ResourceNotFoundException("Player not found");
-        }
-        return Mono.just(converter.toPlayerRepresentation(player));
+        return Mono.fromCallable(() -> repository.findPlayerByPseudonym(pseudonym))
+                .map(converter::toPlayerRepresentation)
+                .switchIfEmpty(Mono.error(new ResourceNotFoundException("Player not found")));
     }
 
     public Mono<GameRepresentation> getGameByPseudonym(String pseudonym) {
