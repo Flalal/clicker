@@ -10,7 +10,7 @@ spring:
   main:
     web-application-type: reactive
   datasource:
-    url: jdbc:postgresql://192.168.1.26:5432/clicker_db
+    url: jdbc:postgresql://localhost:5432/clicker_db
     username: clicker_api
     password: password
 
